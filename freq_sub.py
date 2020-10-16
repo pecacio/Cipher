@@ -1,7 +1,10 @@
+#importing the necessary modules
 import numpy as np
 import pandas as pd
 from pandas import DataFrame as df
 from pandas import Series as sr
+
+#function to decode the cipher using frequncy substitution
 def freq_sub(data):
     data=data.strip()
     data=data.lower()
@@ -15,5 +18,3 @@ def freq_sub(data):
         dcdl.append(s1[x[i]])
     dcd=''.join([str(i) for i in dcdl])
     print(dcd)
-
-    
