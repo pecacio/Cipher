@@ -1,7 +1,10 @@
+#importing the necessary modules
 import numpy as np
 import pandas as pd
 from pandas import Series as sr
 from pandas import DataFrame as df
+
+#initializing the global variables
 flag=False
 flag2=False
 ratio_init=0.6
@@ -9,6 +12,8 @@ alphabets=list('abcdefghijklmnopqrstuvwxyz')
 a_to_n=dict(zip(alphabets,range(26)))
 n_to_a=dict(zip(range(26),alphabets))
 freq=[8.497,1.492,2.202,4.253,11.162,2.228,2.015,6.094,7.546,0.153,1.292,4.025,2.406,6.749,7.507,1.929,0.095,7.587,6.327,9.356,2.758,0.978,2.560,0.150,1.994,0.077]
+
+#function to calculate the incidences array in the text to guess the key length 
 def incidences(text):
     data=text.strip().lower()
     l=list(data)
@@ -21,6 +26,8 @@ def incidences(text):
                 s=s+1
         incd.append(s)
     return np.array(incd)
+
+#function to compute the possible key lengths from the incidences array
 def poss_key_len(text,ratio=ratio_init):
     global ratio_init,flag
     incd=incidences(text)
@@ -51,6 +58,8 @@ def poss_key_len(text,ratio=ratio_init):
         print(t_dash)
     key_length=t.value_counts().index[0]
     return key_length,list((t.value_counts()).index)
+
+#function to decrypt the cipher using the key length.It is a sub-function of the 'find_key' function
 def func(text,key_len):
     global alphabets
     data=text.strip().lower()
@@ -67,6 +76,8 @@ def func(text,key_len):
         x3=x2/x1.count()
         frame[i]=x3
     return frame
+
+#function to find the key when the key length is given 
 def find_key(text,key_len):
     global alphabets,freq,flag
     frame=func(text,key_len)
@@ -90,6 +101,9 @@ def find_key(text,key_len):
     print('Key: ')
     print(''.join(arrnum_to_arrtext(shift)))
     return shift
+
+#function to decrypt the cipher when key length or the key is given
+#if the key or key length is not given then the function 'auto_decrypt' is called
 def decrypt(text,key=None,key_len=None):
     global alphabets,a_to_n,n_to_a,flag
     if key==None:
@@ -108,6 +122,8 @@ def decrypt(text,key=None,key_len=None):
         dcd.append(lttr)
     flag=False
     return ''.join(dcd)
+
+#function to decrypt the cipher when key length or key is not given
 def auto_decrypt(text,ratio=ratio_init):
     global alphabets,a_to_n,n_to_a,ratio_init,flag
     flag=True
@@ -127,6 +143,8 @@ def auto_decrypt(text,ratio=ratio_init):
     print('\nDECODED TEXT: \n')
     flag=False
     return dcd
+
+#function to encrypt text with a given key
 def encrypt(text,key):
     global a_to_n,n_to_a
     keyn=key
@@ -146,6 +164,8 @@ def encrypt(text,key):
     print('Encoded Text: \n')
     encd_text=''.join(encd)
     return encd_text
+
+#function to convert the text to numbers
 def arrtext_to_arrnum(t):
     global a_to_n
     t1=list(t)
@@ -155,6 +175,8 @@ def arrtext_to_arrnum(t):
     for i in range(len(t)):
         n1.append(a_to_n[t1[i]])
     return n1
+
+#function to convert the numbers to text
 def arrnum_to_arrtext(n):
     global n_to_a
     n1=list(n)
@@ -162,6 +184,9 @@ def arrnum_to_arrtext(n):
     for i in range(len(n)):
         t1.append(n_to_a[n1[i]])
     return t1
+
+#function to decrypt with varying key lengths
+#if array of possible key lengths is not given then possible key length array is provided by the ' poss_key_len' function
 def find_key_multiple_keylen(text,key_len_array=None,ratio=ratio_init,refine=False):
     global flag,flag2,ratio_init
     flag=True
@@ -184,6 +209,8 @@ def find_key_multiple_keylen(text,key_len_array=None,ratio=ratio_init,refine=Fal
     frame=df(dcd,columns=['Key','Key_Len','Decoded text'])
     flag2=False
     return frame
+
+#function to set the letter frequencies of the laguage used 
 def set_letter_freq(f=freq):
     global freq
     freq=f
