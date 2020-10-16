@@ -187,6 +187,7 @@ def arrnum_to_arrtext(n):
 
 #function to decrypt with varying key lengths
 #if array of possible key lengths is not given then possible key length array is provided by the ' poss_key_len' function
+#if refine is set to True then key_len_array is refined by deleting the key lengths which are multiple of others
 def find_key_multiple_keylen(text,key_len_array=None,ratio=ratio_init,refine=False):
     global flag,flag2,ratio_init
     flag=True
@@ -214,6 +215,8 @@ def find_key_multiple_keylen(text,key_len_array=None,ratio=ratio_init,refine=Fal
 def set_letter_freq(f=freq):
     global freq
     freq=f
+    
+#function which removes key lengths which are multiple of others
 def refinement(arr):
     a=arr[0]
     x=[a]
